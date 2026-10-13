@@ -1,0 +1,27 @@
+services:
+  - type: web
+    name: prompt-out-web
+    runtime: static
+    buildCommand: npm ci --include=dev && npm run build
+    staticPublishPath: dist
+    envVars:
+      - key: NODE_VERSION
+        value: 22
+      - key: SUPABASE_URL
+        sync: false
+      - key: SUPABASE_ANON_KEY   # public anon key only, never the service-role key
+        sync: false
+      - key: MCP_URL
+        sync: false
+      - key: CONTACT_EMAIL
+        sync: false
+    routes:
+      # Clean URLs. /oauth/consent is the Supabase OAuth "authorization path".
+      - { type: rewrite, source: /privacy, destination: /privacy.html }
+      - { type: rewrite, source: /terms, destination: /terms.html }
+      - { type: rewrite, source: /oauth/consent, destination: /oauth/consent.html }
+    headers:
+      - { path: /*, name: X-Content-Type-Options, value: nosniff }
+      - { path: /*, name: X-Frame-Options, value: DENY }
+      - { path: /*, name: Referrer-Policy, value: strict-origin-when-cross-origin }
+      - { path: /*, name: Permissions-Policy, value: "camera=(), microphone=(), geolocation=()" }
