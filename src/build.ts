@@ -21,4 +21,14 @@ writeFileSync(join(out, "privacy.html"), renderPrivacy(cfg));
 writeFileSync(join(out, "terms.html"), renderTerms(cfg));
 mkdirSync(join(out, "oauth"), { recursive: true });
 writeFileSync(join(out, "oauth", "consent.html"), renderConsent(cfg));
+// Cloudflare Pages reads this; Render ignores it (headers live in render.yaml).
+writeFileSync(
+  join(out, "_headers"),
+  `/*
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: DENY
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: camera=(), microphone=(), geolocation=()
+`,
+);
 console.log(`built landing → ${out}`);
