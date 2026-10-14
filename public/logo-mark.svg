@@ -1,0 +1,19 @@
+<svg width="128" height="128" viewBox="0 0 128 128" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">PromptOut mark</title>
+  <desc id="desc">A tilted lime rounded square with >_ inside.</desc>
+  <defs>
+    <filter id="hardShadow" x="0" y="0" width="200%" height="200%">
+      <feOffset dx="4" dy="4" />
+      <feColorMatrix type="matrix" values="0 0 0 0 0.0667 0 0 0 0 0.0941 0 0 0 0 0.0824 0 0 0 1 0"/>
+      <feBlend in="SourceGraphic" mode="normal"/>
+    </filter>
+  </defs>
+  <g transform="translate(8 8)">
+    <g transform="rotate(-7 56 56)" filter="url(#hardShadow)">
+      <rect x="8" y="8" width="96" height="96" rx="18" fill="#C6F12A" stroke="#111815" stroke-width="3"/>
+    </g>
+    <text x="56" y="67" text-anchor="middle" fill="#111815"
+      font-family="SFMono-Regular, SF Mono, ui-monospace, Menlo, Consolas, monospace"
+      font-size="31" font-weight="700" letter-spacing="-1.2">&gt;_</text>
+  </g>
+</svg>

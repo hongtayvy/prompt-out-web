@@ -1,4 +1,4 @@
-import { mkdirSync, writeFileSync } from "node:fs";
+import { cpSync, mkdirSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { renderConsent, renderIndex, renderPrivacy, renderTerms, type SiteConfig } from "./render.js";
@@ -19,6 +19,7 @@ const cfg: SiteConfig = {
 const FRAME_ANCESTORS = "https://victoryang.xyz https://www.victoryang.xyz";
 const out = join(dirname(fileURLToPath(import.meta.url)), "../dist");
 mkdirSync(out, { recursive: true });
+cpSync(join(dirname(fileURLToPath(import.meta.url)), "../public"), out, { recursive: true });
 writeFileSync(join(out, "index.html"), renderIndex(cfg));
 writeFileSync(join(out, "privacy.html"), renderPrivacy(cfg));
 writeFileSync(join(out, "terms.html"), renderTerms(cfg));
