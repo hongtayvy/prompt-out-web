@@ -40,7 +40,7 @@ export function renderLegalShell(title: string, bodyHtml: string, cfg: SiteConfi
   return fill(
     `<!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#f5f6f2"><title>${html(title)} · __BRAND__</title>${style}</head>
+<meta name="theme-color" content="#f5f6f2"><link rel="icon" type="image/svg+xml" href="/favicon.svg"><title>${html(title)} · __BRAND__</title>${style}</head>
 <body><div class="container">${nav}<main class="legal">${bodyHtml}</main>${footer}</div></body></html>`,
     cfg,
   );
