@@ -3,14 +3,16 @@ import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { renderConsent, renderIndex, renderPrivacy, renderTerms, type SiteConfig } from "./render.js";
 
-const need = (k: string) => {
-  const v = process.env[k];
-  if (!v) throw new Error(`Missing env var ${k}`);
+// Supabase isn't required to ship the landing page: the page detects empty
+// values and disables the waitlist form. Set both to enable it (and /oauth/consent).
+const opt = (k: string) => {
+  const v = process.env[k] ?? "";
+  if (!v) console.warn(`warning: ${k} is not set; waitlist/OAuth consent disabled`);
   return v;
 };
 const cfg: SiteConfig = {
-  supabaseUrl: need("SUPABASE_URL").replace(/\/$/, ""),
-  supabaseAnonKey: need("SUPABASE_ANON_KEY"),
+  supabaseUrl: opt("SUPABASE_URL").replace(/\/$/, ""),
+  supabaseAnonKey: opt("SUPABASE_ANON_KEY"),
   mcpUrl: process.env.MCP_URL ?? "https://mcp.example.com/mcp",
   contactEmail: process.env.CONTACT_EMAIL ?? "support@example.com",
 };
