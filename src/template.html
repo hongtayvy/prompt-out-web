@@ -33,6 +33,7 @@
   const contact=document.getElementById('contact');if(!CONFIG.contactEmail.startsWith('__')){contact.href='mailto:'+CONFIG.contactEmail;}
   const ready=CONFIG.supabaseUrl.startsWith('https://') && CONFIG.supabaseAnonKey.length>20 && !CONFIG.supabaseAnonKey.startsWith('__');
   if(ready)document.getElementById('preview-notice').hidden=true;
+  async function isBadEmail(r){if(r.status===400||r.status===422)return true;try{const j=await r.clone().json();return j.code==='23514'||j.code==='42501';}catch(_){return false;}}
   const form=document.getElementById('waitlist'),message=document.getElementById('form-message');
   form.addEventListener('submit',async function(e){e.preventDefault();
     if(form.elements.company.value)return;
@@ -41,7 +42,7 @@
     button.disabled=true;message.textContent='Adding you to the list…';
     try{const response=await fetch(CONFIG.supabaseUrl.replace(/\/$/,'')+'/rest/v1/waitlist',{method:'POST',headers:{'Content-Type':'application/json',apikey:CONFIG.supabaseAnonKey,Authorization:'Bearer '+CONFIG.supabaseAnonKey,Prefer:'return=minimal'},body:JSON.stringify({email})});
       if(response.ok||response.status===409){message.textContent="You're on the list. We'll email you when it's ready.";form.reset();}
-      else if(response.status===400||response.status===422){message.textContent='Please check that email address and try again.';}
+      else if(await isBadEmail(response)){message.textContent='Please check that email address and try again.';}
       else{message.textContent='Something went wrong. Please try again.';}
     }catch(_){message.textContent='Could not connect. Please try again.';}
     finally{button.disabled=false;}
