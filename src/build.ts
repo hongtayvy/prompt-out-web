@@ -1,21 +1,14 @@
 import { cpSync, mkdirSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
+import { loadSiteConfig } from "./config.js";
 import { renderConsent, renderIndex, renderPrivacy, renderTerms, type SiteConfig } from "./render.js";
 
-// Supabase isn't required to ship the landing page: the page detects empty
-// values and disables the waitlist form. Set both to enable it (and /oauth/consent).
-const opt = (k: string) => {
-  const v = process.env[k] ?? "";
-  if (!v) console.warn(`warning: ${k} is not set; waitlist/OAuth consent disabled`);
-  return v;
-};
-const cfg: SiteConfig = {
-  supabaseUrl: opt("SUPABASE_URL").replace(/\/$/, ""),
-  supabaseAnonKey: opt("SUPABASE_ANON_KEY"),
-  mcpUrl: process.env.MCP_URL ?? "https://mcp.example.com/mcp",
-  contactEmail: process.env.CONTACT_EMAIL ?? "support@example.com",
-};
+// Env vars override site.config.json. If Supabase isn't configured the page detects the empty
+// values and disables the waitlist form (and /oauth/consent).
+const root = join(dirname(fileURLToPath(import.meta.url)), "..");
+const cfg: SiteConfig = loadSiteConfig(process.env, join(root, "site.config.json"));
+if (!cfg.supabaseUrl || !cfg.supabaseAnonKey) console.warn("warning: Supabase not configured; waitlist/OAuth consent disabled");
 const FRAME_ANCESTORS = "https://victoryang.xyz https://www.victoryang.xyz";
 const out = join(dirname(fileURLToPath(import.meta.url)), "../dist");
 mkdirSync(out, { recursive: true });

@@ -17,3 +17,6 @@ Static landing page, waitlist, privacy/terms and OAuth consent pages.
 4. Optional: add a custom domain in Render (HTTPS is automatic).
 
 Changing env vars requires a redeploy, because values are baked in at build time.
+
+## Config
+`site.config.json` holds the PUBLIC build values (Supabase project URL, publishable key, MCP URL, contact email). Environment variables of the same names override it. Never put a secret or service-role key here; the build refuses to run if it detects one.
