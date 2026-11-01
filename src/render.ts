@@ -7,6 +7,8 @@ export interface SiteConfig {
   /** Public anon key only. The service-role key must never reach this site. */
   supabaseAnonKey: string;
   mcpUrl: string;
+  /** Where the web app lives (sign in / sign up). */
+  appUrl: string;
   contactEmail: string;
 }
 

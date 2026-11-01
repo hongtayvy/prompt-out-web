@@ -2,5 +2,6 @@
   "supabaseUrl": "https://vrfeezzqteamhvpgkkqk.supabase.co",
   "supabaseAnonKey": "sb_publishable_4MVqk7mOZ7Gd6jz2ExftVg_lcpW6IAK",
   "mcpUrl": "https://mcp.promptout.app/mcp",
-  "contactEmail": "hello@promptout.app"
+  "contactEmail": "hello@promptout.app",
+  "appUrl": "https://my.promptout.app"
 }
