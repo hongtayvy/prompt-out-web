@@ -61,7 +61,7 @@ export function renderPrivacy(cfg: SiteConfig): string {
 <h2>Storage on your device</h2><p>The web app keeps your sign-in session in your browser's local storage, and the mobile app keeps it in the device's secure storage. We use no advertising or cross-site tracking cookies.</p>
 <h2>Your choices</h2><ul>
 <li><strong>Export:</strong> in the app, go to Settings → Your data → Export library to download everything as a JSON file.</li>
-<li><strong>Edit or delete prompts:</strong> at any time, in the app.</li>
+<li><strong>Edit or delete prompts:</strong> at any time, in the app. A deleted prompt stays in Recently deleted for 30 days so you can restore it, then it is permanently erased. To erase one sooner, open Settings → Recently deleted and choose Delete forever.</li>
 <li><strong>Delete your account:</strong> in the app, go to Settings → Delete account. This permanently deletes your account and every prompt in your library. Copies in provider backups are removed on their normal backup cycle.</li>
 <li><strong>Anything else</strong> (access, correction, or removal from the waitlist): email ${mail}.</li></ul>
 <h2>Security</h2><p>Data is encrypted in transit, access to each library is limited to its owner, and we limit who can reach production systems. No service can promise perfect security, so please use a strong, unique password.</p>
