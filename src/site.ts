@@ -15,13 +15,14 @@ const html = (s: string) => s.replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "
 export function renderLanding(cfg: SiteConfig): string {
   return TEMPLATE.replaceAll("__SUPABASE_URL__", safe(cfg.supabaseUrl))
     .replaceAll("__SUPABASE_ANON_KEY__", safe(cfg.supabaseAnonKey))
+    .replaceAll("__APP_URL__", html(cfg.appUrl))
     .replaceAll("__CONTACT_EMAIL__", html(cfg.contactEmail))
     .replaceAll("__BRAND_SLUG__", html(BRAND_SLUG))
     .replaceAll("__BRAND__", html(BRAND_NAME));
 }
 
 const fill = (t: string, cfg: SiteConfig) =>
-  t.replaceAll("__CONTACT_EMAIL__", html(cfg.contactEmail)).replaceAll("__BRAND_SLUG__", html(BRAND_SLUG)).replaceAll("__BRAND__", html(BRAND_NAME));
+  t.replaceAll("__APP_URL__", html(cfg.appUrl)).replaceAll("__CONTACT_EMAIL__", html(cfg.contactEmail)).replaceAll("__BRAND_SLUG__", html(BRAND_SLUG)).replaceAll("__BRAND__", html(BRAND_NAME));
 
 const pick = (re: RegExp) => TEMPLATE.match(re)?.[0] ?? "";
 

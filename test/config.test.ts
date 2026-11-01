@@ -26,6 +26,15 @@ describe("loadSiteConfig", () => {
     expect(() => loadSiteConfig({ SUPABASE_ANON_KEY: jwt })).toThrow(/service-role|secret/i);
     expect(() => loadSiteConfig({}, file({ supabaseAnonKey: "sb_secret_abc" }))).toThrow();
   });
+  it("reads the app URL from the file, lets env override it, and trims a trailing slash", () => {
+    const p = file({ appUrl: "https://my.example.app/" });
+    expect(loadSiteConfig({}, p).appUrl).toBe("https://my.example.app");
+    expect(loadSiteConfig({ APP_URL: "https://other.app" }, p).appUrl).toBe("https://other.app");
+  });
+  it("refuses an app URL that is not http(s)", () => {
+    expect(() => loadSiteConfig({ APP_URL: "javascript:alert(1)" })).toThrow(/http/i);
+    expect(() => loadSiteConfig({}, file({ appUrl: 'https://x.test/"onmouseover="x' }))).toThrow(/http/i);
+  });
   it("accepts a legacy anon JWT", () => {
     const jwt = `h.${b64({ role: "anon" })}.s`;
     expect(loadSiteConfig({ SUPABASE_ANON_KEY: jwt }).supabaseAnonKey).toBe(jwt);

@@ -20,6 +20,7 @@ export function loadSiteConfig(env: Record<string, string | undefined>, filePath
     supabaseUrl: pick("SUPABASE_URL", file.supabaseUrl).replace(/\/$/, ""),
     supabaseAnonKey: supabaseKey,
     mcpUrl: pick("MCP_URL", file.mcpUrl, "https://mcp.example.com/mcp"),
+    appUrl: webUrl(pick("APP_URL", file.appUrl, "https://app.example.com")),
     contactEmail: pick("CONTACT_EMAIL", file.contactEmail, "support@example.com"),
   };
 }
@@ -33,4 +34,10 @@ function looksLikeServiceRoleJwt(key: string): boolean {
   } catch {
     return false;
   }
+}
+
+/** The web app's address. Only http(s) links are allowed, since it becomes an href on the page. */
+function webUrl(url: string): string {
+  if (!/^https?:\/\/[^\s"'<>]+$/i.test(url)) throw new Error(`APP_URL must be an http(s) URL, got: ${url}`);
+  return url.replace(/\/$/, "");
 }
