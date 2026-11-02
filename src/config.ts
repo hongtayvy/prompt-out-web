@@ -22,7 +22,16 @@ export function loadSiteConfig(env: Record<string, string | undefined>, filePath
     mcpUrl: pick("MCP_URL", file.mcpUrl, "https://mcp.example.com/mcp"),
     appUrl: webUrl(pick("APP_URL", file.appUrl, "https://app.example.com")),
     contactEmail: pick("CONTACT_EMAIL", file.contactEmail, "support@example.com"),
+    operatorName: pick("OPERATOR_NAME", file.operatorName),
+    operatorAddress: pick("OPERATOR_ADDRESS", file.operatorAddress),
+    governingLaw: pick("GOVERNING_LAW", file.governingLaw),
   };
+}
+
+/** The legal pages name who runs the service and which law applies. The build refuses to ship them blank. */
+export function missingOperatorFields(cfg: SiteConfig): string[] {
+  const need: (keyof SiteConfig)[] = ["operatorName", "operatorAddress", "governingLaw"];
+  return need.filter((k) => !cfg[k].trim());
 }
 
 /** Legacy Supabase keys are JWTs whose payload carries the role. */

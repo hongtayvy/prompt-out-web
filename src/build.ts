@@ -1,13 +1,15 @@
 import { cpSync, mkdirSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
-import { loadSiteConfig } from "./config.js";
+import { loadSiteConfig, missingOperatorFields } from "./config.js";
 import { renderConsent, renderIndex, renderPrivacy, renderTerms, type SiteConfig } from "./render.js";
 
 // Env vars override site.config.json. If Supabase isn't configured the page detects the empty
 // values and disables the waitlist form (and /oauth/consent).
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 const cfg: SiteConfig = loadSiteConfig(process.env, join(root, "site.config.json"));
+const missing = missingOperatorFields(cfg);
+if (missing.length) throw new Error(`Refusing to build: set ${missing.join(", ")} in site.config.json. They appear in the Privacy Policy and Terms.`);
 if (!cfg.supabaseUrl || !cfg.supabaseAnonKey) console.warn("warning: Supabase not configured; waitlist/OAuth consent disabled");
 const FRAME_ANCESTORS = "https://victoryang.xyz https://www.victoryang.xyz";
 const out = join(dirname(fileURLToPath(import.meta.url)), "../dist");
