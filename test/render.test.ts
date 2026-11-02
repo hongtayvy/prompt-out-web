@@ -34,6 +34,14 @@ describe("landing", () => {
     expect(renderPrivacy(cfg)).toContain("Privacy Policy");
     expect(renderTerms(cfg)).toContain("Terms of Service");
   });
+  it("covers payments, cancelling and deletion in both policies", () => {
+    const privacy = renderPrivacy(cfg);
+    expect(privacy).toContain("Stripe");
+    expect(privacy).toContain("never see or store your full card number");
+    expect(privacy).toContain("deleting your account also cancels it");
+    const terms = renderTerms(cfg);
+    for (const text of ["Plans and Pro subscriptions", "renew automatically", "Settings → Manage subscription", "up to 25 prompts", "cancels any Pro subscription"]) expect(terms).toContain(text);
+  });
   it("escapes config values", () => {
     expect(renderPrivacy({ ...cfg, contactEmail: '"><script>x</script>' })).not.toContain("<script>x</script>");
   });
