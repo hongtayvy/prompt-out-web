@@ -2,7 +2,7 @@ import { describe, it, expect } from "vitest";
 import { mkdtempSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { loadSiteConfig } from "../src/config.js";
+import { loadSiteConfig, missingOperatorFields } from "../src/config.js";
 
 const file = (obj: object) => {
   const p = join(mkdtempSync(join(tmpdir(), "cfg-")), "site.config.json");
@@ -38,5 +38,15 @@ describe("loadSiteConfig", () => {
   it("accepts a legacy anon JWT", () => {
     const jwt = `h.${b64({ role: "anon" })}.s`;
     expect(loadSiteConfig({ SUPABASE_ANON_KEY: jwt }).supabaseAnonKey).toBe(jwt);
+  });
+  it("reads the operator details from the file, with env overriding", () => {
+    const p = file({ operatorName: "Jane Doe", operatorAddress: "1 Main St", governingLaw: "the State of Illinois" });
+    expect(loadSiteConfig({}, p)).toMatchObject({ operatorName: "Jane Doe", operatorAddress: "1 Main St", governingLaw: "the State of Illinois" });
+    expect(loadSiteConfig({ OPERATOR_NAME: "Acme LLC" }, p).operatorName).toBe("Acme LLC");
+  });
+  it("reports which legal fields are still blank", () => {
+    expect(missingOperatorFields(loadSiteConfig({}, "/nonexistent.json"))).toEqual(["operatorName", "operatorAddress", "governingLaw"]);
+    expect(missingOperatorFields(loadSiteConfig({ OPERATOR_NAME: " ", OPERATOR_ADDRESS: "x", GOVERNING_LAW: "y" }))).toEqual(["operatorName"]);
+    expect(missingOperatorFields(loadSiteConfig({ OPERATOR_NAME: "a", OPERATOR_ADDRESS: "x", GOVERNING_LAW: "y" }))).toEqual([]);
   });
 });
